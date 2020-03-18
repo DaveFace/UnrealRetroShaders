@@ -7,6 +7,8 @@ Some functions are based on other people's work online, but as most of this work
 
 Happy to accept contributions if anyone has improvements / tweaks / new shaders to add.
 
+![](Preview.jpg)
+
 ## Getting Started
 
 Download a copy of the repository, and put 'RetroShaders' in your project's Content directory.
