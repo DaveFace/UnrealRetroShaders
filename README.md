@@ -20,22 +20,26 @@ This has been made / tested in Unreal Engine version 4.24. It should work in pre
 
 ### Recommended Settings
 
-Here's a few things you'll probably want to change in your project settings.
+Here's a few things you'll probably want to change in your project settings to get the 'retro look'
 
 #### Rendering
 
 - Auto Exposure *OFF*
 - Motion Bluer *OFF*
-- Anti-Aliasing Method *NONE* or *FXAA*
+- Anti-Aliasing Method *NONE*
 
 #### Device Profiles
+You can use devie profiles to set some global console variables and texture settings for your project; this is easier than manually setting each texture to use nearest neighbor (point) filtering, for example.
+
 You can find this under Window > Developer Tools > Device Profiles
 
- 1. Click the tool icon under 'CVars' on your platform e.g. Windows (note - WindowsNoEditor etc. all inherit from Windows, so no need to edit each one)
- 2. In Console Variables, in the Rendering tab, add `r.upscale.quality` with a value of `0` - this means that when we drop the render resolution, we get nice crunchy pixels
- 3. In Console Variables, in the Scalability tab, add `sg.resolutionquality` with a value of `100`
- 4. In Texture LOD Settings, for World & WorldNormalMap, set the `MinMagFilter` to `point`. This makes those texture groups render with nearest neighbor filtering by default, so you don't have to change it for each texture
- 5. Optionally, you can do the same thing for other texture groups including `UI` and `Lightmap` so you get nice pixellation on those, too
+Click the tool / spanner icon under 'CVars' on your platform e.g. Windows (note - WindowsNoEditor etc. all inherit from Windows, so no need to edit each one)
+
+* In Console Variables, in the Rendering tab, add `r.upscale.quality` with a value of `0` - this means that when we drop the render resolution, we get nice crunchy pixels
+* In Console Variables, in the Rendering tab, add `r.shadowquality` with a value of `1` - this turns off filtering for dynamic shadows
+* In Console Variables, in the Scalability tab, add `sg.resolutionquality` with a value of `100`
+* In Texture LOD Settings, for World & WorldNormalMap, set the `MinMagFilter` to `point`. This makes those texture groups render with nearest neighbor filtering by default, so you don't have to change it for each texture
+* Optionally, you can do the same thing for other texture groups including `UI` and `Lightmap` so you get nice pixellation on those, too
 
 ## Documentation
 
