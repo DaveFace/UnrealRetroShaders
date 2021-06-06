@@ -50,3 +50,14 @@ Click the tool / spanner icon under 'CVars' on your platform e.g. Windows (note 
  - Lightmap
 
 ![](DisableTextureFiltering.jpg)
+
+Credits
+=======
+Core Content
+------------
+- YUV colour conversion / Bayer implementation by [Jazz Mickle](https://twitter.com/jazzmickle/status/1269238990827335689)
+
+Demo Content
+------------
+- Texures based on images from www.textures.com
+- Everything else is original - feel free to use it however you want!
