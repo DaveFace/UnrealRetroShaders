@@ -1,76 +1,52 @@
 # Retro Shader Pack by DaveFace
-**Current Version: v3 (01/11/2020)**
+**Current Version: v4 (06/06/2021)**
 
-This is an Unreal Engine 4 material & post-process pack for all your retro PS1-esque game needs. I may add more stuff over time but I think this provides the most common effects you'd want for this kind of project. Note that this pack is not intended as a realistic PS1 imitation - if you want to mimic more of the PS1's strange rendering artifacts, I recommend [Marcis' pack available on itch.io here](https://marcis.itch.io/psxfx).
+![](Preview.jpg)
+
+This is an Unreal Engine 4 material & post-process pack for all your retro PS1-esque game needs. I may add more stuff over time but I think this provides the most common effects you'd want for this kind of project. Note that this pack is not intended as a 'realistic' PS1 imitation - if you want to mimic more of the PS1's strange rendering artifacts, I recommend [Marcis' pack available on itch.io here](https://marcis.itch.io/psxfx).
 
 Some functions are based on other people's work online, I've tried to include comments linking to their work where I can remember. If I've forgotten to give someone credit, my apologies, it isn't intentional.
 
 Happy to accept contributions if anyone has improvements / tweaks / new shaders to add.
 
-![](Preview.jpg)
+
 
 ## Getting Started
 
-For Version 2 and above, I'm distributing this as a complete project. But really all you need is the 'RetroShaders' folder in the content directory. The 'ExampleContent' folder is optional, none of the core materials / material functions should depend on it.
+For Version 2 and above, I'm distributing this as a complete project. As of Version 4, I'm including a bit more demo content and I'm probably going to add a little prototype retro game, if I get round to it.
+
+All you really need is the 'RetroShader' folder - you can ignore 'DemoContent' if you want. The demo content is optional, none of the core materials / material functions depend on it.
 
 ### Unreal Engine Version
 
-This has been made / tested in Unreal Engine version 4.25. It should work in subsequent versions, though, as the functionality is pretty basic.
+This has been made & tested in Unreal Engine version 4.25. It should work in subsequent versions though, as the functionality is pretty basic.
 
-### Recommended Settings
+As of writing (June 2021) I have not tested this in Unreal Engine 5 - but it will probably work just fine.
 
-Here's a few things you'll probably want to change in your project settings to get the 'retro look'
+### Using the pack
 
-#### Rendering
+To use the post-process material, drop 'BP_RetroPostProcess' into your scene - it doesn't matter where. The default settings should 'just work', but everything is commented to explain what's going on. Your main choices are:
 
-- Auto Exposure *OFF*
-- Motion Blur *OFF*
-- Bloom *OFF*
-- Anti-Aliasing Method *NONE*
+ - Whether to use YUV Colour Space, or simple posterise / colour banding. YUV is more faithful to the PS1, but does not handle very colourful scenes so well where you might want to push the available colours up a notch.
+ - Dithering method. There are currently two, and I would recommend sticking to accurate bayer dithering (the default) for now - I'm still experimenting with other dither methods. The 'hacky' version provided works well in some scenes, but for most it just messes with the brightness.
 
-The blueprint actually disables motion blur, bloom, and sets a few console variables including anti aliasing - so you don't really have to worry about this. 
+I would recommend creating your own Child Blueprint (Right click > Create Child Blueprint Class) and creating your own default settings. This also means that if I update the blueprint in future, any non-breaking changes will simply propagate to your own version without breaking your defaults.
 
-#### Device Profiles
-You can use devie profiles to set some global console variables and texture settings for your project; this is easier than manually setting each texture to use nearest neighbor (point) filtering, for example.
+***Major caveat with V4 and above** - To achieve the low resolution look, this system dynamically adjusts the console parameter `r.ScreenPercentage` to hit a target resolution, which drops the render resolution of the frame ([see Unreal docs here](https://docs.unrealengine.com/4.26/en-US/RenderingAndGraphics/ScreenPercentage/)). This does not get previewed in the editor viewport, even in 'Simulate' mode. You will need to be in a Play-in-editor (PIE) session to see it. For look-dev, you can get an approximation by dropping the 'Screen Percentage' amount to 50 in the viewport, by clicking the top left arrow.*
+
+For the full effect, you will also want your materials to use the retro functions - I'd recommend using the provided master materials to create instances from. If you need to integrate the functions into custom materials, affine warping and vertex wobble are created as reusable functions - to understand how/where to use them, just check the included master materials.
+
+### Make all textures use nearest-neighbor
+A large part of the retro aesthetic is nearest-neighbor filtering on textures. This can be set on a per-material basis if you really want to - but it's far easier to make this a global setting using Unreal Engine's device profiles.
 
 You can find this under Window > Developer Tools > Device Profiles
 
-Click the tool / spanner icon under 'CVars' on your platform e.g. Windows (note - WindowsNoEditor etc. all inherit from Windows, so no need to edit each one)
-
-* In Texture LOD Settings, for World & WorldNormalMap, set the `MinMagFilter` to `point`. This makes those texture groups render with nearest neighbor filtering by default, so you don't have to change it for each texture
-* Optionally, you can do the same thing for other texture groups including `UI` and `Lightmap` so you get nice pixellation on those, too
+Click the tool / spanner icon under 'CVars' on your platform e.g. Windows (note - WindowsNoEditor etc. all inherit from Windows, so no need to edit each one). Then under Texture LOD Settings, for each texture group you want, open the drop-down and set the `MinMagFilter` to `point`. This makes those texture groups render with nearest neighbor filtering by default. I'd recommend doing it for the following:
+ - World (the most common)
+ - Character
+ - Effects
+ - Skybox
+ - UI
+ - Lightmap
 
 ![](DisableTextureFiltering.jpg)
-
-## Documentation
-
-I'll give the basics of each shader and it's use here.
-
-### Retro Material
-The retro material has the following functions:
-
- - Diffuse (Texture / Colour) and Normal Map support
- - Posterise texture (reduces colours of diffuse texture to mimic small colour pallete textures)
- - Opacity Mask / Transparancy Support with a screen space dithering effect (this can produce some weird results with the post process pixellation, I'm not sure how to fix this yet)
- - Affine texture warping (mimics PS1 hardware)
- - Vertex Wobble (mimics PS1 hardware / some early PC games e.g. Quake and Unreal)
-
-The amount of vertex wobble and the strength of the affine texture warp are controlled in the material parameter collection `MPC_RetroShaders`.
-
-### Post Process
-The `BP_RetroPostProcess` blueprint should handle most post process functions out the box, but you can use the post process materials directly if you really want to.
-
-The `PP_RetroLook` material does three things:
-
-1. Pixellate - Pixellates the screen, using a target vertical number of pixels.
-2. (Optionally) reduces to YUV, and then posterises - Reduces the amount of colours on screen, causing banding. Emulates older bitdepth graphics like the PS1. You will probably want to adjust this per level, or use the diffuse posterisation on the model material to balance everything out. While YUV is more accurate to the PS1, it also leads to a certain colour tint, which may not be desirable
-3. Dithering - Adds a dithering effect to reduce the appearance of colour banding (above)
-
-The `BP_RetroPostProcess` blueprint gives you an easy way to set these paramaters per-level, but also does a little downsample trickery. In addition to the `FinalResolution` value (which is the final *vertical* number of pixels on screen), you can set a `DownsampleResolution` which drops the engine renderscale to match that vertical resolution. I'd recommend having this value ~200px above your final pixellate resolution, which gives you a little bit of supersampling at a fairly negligible performance cost.
-
-### Future Improvements
-A few things I'd like to improve:
-
-- Pixel-perfect Dithering, at the moment at very low resolutions, you may notice that the dithering pattern is slightly offset from the final render resolution
-- Pixel-perfect opacity masks, e.g for class. Similar to the above, this doesn't really factor in the final resolution and can lead to some weird results
-- Faithful dithering - this is possible (see [Jax's implementation](https://twitter.com/jazzmickle/status/1269238990827335689)) but relies on the actual renderscale, but in my implementation, the renderscale is larger than the final resolution. Also it is much harder to control and customise, leading to a harsher default effect, which I personally don't like. Again, I'm not trying to be 100% faithful, just imitate the style.
