@@ -48,7 +48,7 @@ You may have noticed that we just edited an engine shader: congratulations, now 
 ### Optional Step #2 - Make all textures use nearest-neighbor
 A large part of the retro aesthetic is nearest-neighbor filtering on textures. This can be set on a per-material basis if you really want to - but it's far easier to make this a global setting using Unreal Engine's device profiles.
 
-You can find this under **Window > Developer Tools > Device Profiles**
+You can find this under **Tools > Platforms > Device Profiles**
 
 Click the tool / spanner icon under 'CVars' on your platform e.g. Windows (note - WindowsNoEditor etc. all inherit from Windows, so no need to edit each one). Then under Texture LOD Settings, for each texture group you want, open the drop-down and set the `MinMagFilter` to `point`. This makes those texture groups render with nearest neighbor filtering by default. I'd recommend doing it for the following:
  - World (the most common)
