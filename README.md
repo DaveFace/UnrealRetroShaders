@@ -1,9 +1,11 @@
 # Retro Shader Pack by DaveFace
-**Current Version: v5 (02/02/2022) - for Unreal Engine 4.27+** 
+**Current Version: v5 (02/02/2022) - for Unreal Engine 4.27**
 
 ![](Preview.jpg)
 
 ---
+
+**Note that Unreal Engine 5 is not currently supported, though there is a sort-of-workaround - see [issue here](https://github.com/DaveFace/UnrealRetroShaders/issues/3). I'm hoping to update this when I have the time.**
 
 This is an Unreal Engine 4 material & post-process pack for all your retro PS1-esque game needs. I may add more stuff over time but I think this provides the most common effects you'd want for this kind of project. Note that this pack is not intended as a 'realistic' PS1 imitation - if you want to mimic more of the PS1's strange rendering artifacts, I recommend [Marcis' pack available on itch.io here](https://marcis.itch.io/psxfx).
 
@@ -16,7 +18,7 @@ All you need to bring into your project is the 'RetroShadersV4/RetroShader/' fol
 
 ### Unreal Engine Version
 
-This has been made & tested in Unreal Engine version 4.27. I have not tested this in Unreal Engine 5 - but it will probably work just fine.
+This has been made & tested in Unreal Engine version 4.27. **Unreal Engine 5 is not currently supported - see [issue here](https://github.com/DaveFace/UnrealRetroShaders/issues/3)**
 
 ### Using the pack
 
@@ -45,10 +47,12 @@ You may have noticed that we just edited an engine shader: congratulations, now 
 
 *I haven't actually tested if this works in a shipping build - if anyone knows a better way to do this, let me know!*
 
-### Optional Step #2 - Make all textures use nearest-neighbor
+### Optional Step #2a - Make all textures use nearest-neighbor automatically
 A large part of the retro aesthetic is nearest-neighbor filtering on textures. This can be set on a per-material basis if you really want to - but it's far easier to make this a global setting using Unreal Engine's device profiles.
 
-You can find this under **Tools > Platforms > Device Profiles**
+You can find this under:
+- **Window > Developer Tools > Device Profile** in Unreal Engine 4
+- **Tools > Platforms > Device Profiles** in Unreal Engine 5
 
 Click the tool / spanner icon under 'CVars' on your platform e.g. Windows (note - WindowsNoEditor etc. all inherit from Windows, so no need to edit each one). Then under Texture LOD Settings, for each texture group you want, open the drop-down and set the `MinMagFilter` to `point`. This makes those texture groups render with nearest neighbor filtering by default. I'd recommend doing it for the following:
  - World (the most common)
@@ -59,6 +63,12 @@ Click the tool / spanner icon under 'CVars' on your platform e.g. Windows (note 
  - Lightmap
 
 ![](DisableTextureFiltering.jpg)
+
+### Optional Step #2b - Make textures use nearest-neighbor manually
+
+If for some reason you don't want to affect all textures, you can make individual textures unfiltered by setting the texture group to '2D Pixels (Unfiltered)' instead of the default 'World', or by manually setting the Filter to Nearest. You can do this in the properties window per-texture, or via the Bulk Property editor.
+
+This will only work on assets you import, so this won't work for things like lightmaps.
 
 Credits
 =======
