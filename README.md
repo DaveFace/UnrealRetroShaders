@@ -5,7 +5,11 @@
 
 ---
 
-**Note that Unreal Engine 5 is not currently supported, though there is a sort-of-workaround - see [issue here](https://github.com/DaveFace/UnrealRetroShaders/issues/3). I'm hoping to update this when I have the time.**
+**⚠️ WARNING ⚠️**
+
+This pack is only compatible with Unreal Engine 4. Unreal Engine 5 has significantly changed the rendederscale process (which this shader relied on) without providing any relevant documentation. This combined with my general experience of Unreal Engine 5 means that I will not be using it for future projects. I will accept any pull requests to resolve the issue, but I am not actively working on it.
+
+---
 
 This is an Unreal Engine 4 material & post-process pack for all your retro PS1-esque game needs. I may add more stuff over time but I think this provides the most common effects you'd want for this kind of project. Note that this pack is not intended as a 'realistic' PS1 imitation - if you want to mimic more of the PS1's strange rendering artifacts, I recommend [Marcis' pack available on itch.io here](https://marcis.itch.io/psxfx).
 
